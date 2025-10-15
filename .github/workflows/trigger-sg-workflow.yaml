@@ -10,14 +10,14 @@ env:
   app_name: "GH-Deployed-Application"
   cloud_platform: "aws"
 
-
-trigger-workflow:
+jobs:
+  trigger-workflow:
     name: Run StackGuardian Workflow
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Execute API Call
+      - name: Execute API Call
         run : |
           pwd
           echo "${{ env.app_name }}"
