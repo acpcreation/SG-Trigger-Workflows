@@ -1,0 +1,24 @@
+name: Run Stack Guardian Functions
+on:
+  workflow_dispatch:
+  push:
+  # pull_request_target: 
+  
+env:
+  # sg_username: ${{ secrets.SG_USERNAME }}
+  # sg_password: ${{ secrets.SG_PASSWORD}}
+  app_name: "GH-Deployed-Application"
+  cloud_platform: "aws"
+
+
+trigger-workflow:
+    name: Run StackGuardian Workflow
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Execute API Call
+        run : |
+          pwd
+          echo "${{ env.app_name }}"
+        
