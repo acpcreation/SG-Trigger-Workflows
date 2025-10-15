@@ -71,9 +71,9 @@ jobs:
         # Check if workflow already exists
         msg=$(echo "$response" | jq -r '.msg')
         if [ "$msg" != "Workflow name not unique" ]; then
-          echo "✅ $msg"
+          echo "✅ SUCCESS: $msg"
         else
-          echo "❌ Workflow name not unique"
+          echo "❌ ERROR: $msg"
           exit 1
         fi
     
