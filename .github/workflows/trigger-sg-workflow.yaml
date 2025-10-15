@@ -5,9 +5,9 @@ on:
   # pull_request_target: 
   
 env:
-  # sg_username: ${{ secrets.SG_USERNAME }}
-  # sg_password: ${{ secrets.SG_PASSWORD}}
+  # sg_token: ${{ secrets.SG_API_TOKEN }}
   app_name: "GH-Deployed-Application"
+  organization: "wicked-hop"
   cloud_platform: "aws"
 
 jobs:
@@ -20,5 +20,6 @@ jobs:
       - name: Execute API Call
         run : |
           pwd
-          echo "${{ env.app_name }}"
+          echo "Application to deploy: ${{ env.app_name }}"
+          curl --location 'https://api.app.stackguardian.io/api/v1/orgs/${{ env.organization }}/wfgrps/listall/' --header 'Authorization: apikey ${{ secrets.SG_API_TOKEN }}' --header 'Accept: application/json' 
         
