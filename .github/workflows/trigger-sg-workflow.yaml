@@ -5,7 +5,7 @@ on:
   # pull_request_target: 
   
 env:
-  app_name: "GH-Deployed-Application"
+  app_name: "GH-Deployed-Application1"
   organization: "wicked-hop"
   wf_group: "APlattel"
   wf_template: "/wicked-hop/aplattel-tf-exercise:5"
@@ -76,8 +76,7 @@ jobs:
           
         else
           # echo "❌ ERROR: $msg"
-          echo "::error title=❌ $msg::The workflow name is already in use at $SG_URL"
-
+          echo "::error title= $msg::The workflow name is already in use at $SG_URL"
           exit 1
         fi
     
