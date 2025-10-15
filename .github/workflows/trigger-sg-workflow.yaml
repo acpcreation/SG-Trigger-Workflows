@@ -22,7 +22,7 @@ jobs:
 
     - name: Create New Workflow 
       run : |
-        curl --location '$SG_URL' \
+        curl --location '${SG_URL}' \
         --header 'Content-Type: application/json' \
         --header 'Accept: application/json' \
         --header 'Authorization: apikey ${{ secrets.SG_API_TOKEN }}' \
@@ -71,7 +71,7 @@ jobs:
 
     - name: Deploy New Workflow 
       run : |
-        curl --location '$SG_URL${{ env.app_name }}/wfruns/' \
+        curl --location '${SG_URL}${{ env.app_name }}/wfruns/' \
         --header 'Content-Type: application/json' \
         --header 'Accept: application/json' \
         --header 'Authorization: apikey ${{ secrets.SG_API_TOKEN }}' \
