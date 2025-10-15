@@ -22,7 +22,7 @@ jobs:
 
     - name: Create New Workflow 
       run : |
-        curl --location "${SG_URL}" \
+        response=$(curl --location "${SG_URL}" \
         --header 'Content-Type: application/json' \
         --header 'Accept: application/json' \
         --header 'Authorization: apikey ${{ secrets.SG_API_TOKEN }}' \
@@ -66,7 +66,16 @@ jobs:
                 "runPreInitHooksOnDrift": false,
                 "runPrePlanHooksOnDrift": false
             }
-        }'
+        }')
+
+        # Check if workflow already exists
+        msg=$(echo "$response" | jq -r '.msg')
+        if [ "$msg" != "Workflow name not unique" ]; then
+          echo "✅ $msg"
+        else
+          echo "❌ Workflow name not unique"
+          exit 1
+        fi
     
 
     - name: Deploy New Workflow 
