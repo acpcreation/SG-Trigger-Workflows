@@ -8,13 +8,12 @@ env:
   app_name: "GH-Deployed-Application"
   organization: "wicked-hop"
   wf_group: "APlattel"
-  sg_url: "https://api.app.stackguardian.io/api/v1/orgs/${{ env.organization }}/wfgrps/${{ env.wf_group }}/wfs/"
+  sg_url: "https://api.app.stackguardian.io/api/v1/orgs/${env.organization}/wfgrps/${{ env.wf_group }}/wfs/"
   wf_template: "/wicked-hop/aplattel-tf-exercise:5"
   tf_action: "plan"
 
-
-
-trigger-workflow:
+jobs:
+  trigger-workflow:
     name: Run StackGuardian Workflow
     runs-on: ubuntu-latest
     steps:
