@@ -8,7 +8,7 @@ env:
   app_name: "GH-Deployed-Application"
   organization: "wicked-hop"
   wf_group: "APlattel"
-  sg_url: "https://api.app.stackguardian.io/api/v1/orgs/${env.organization}/wfgrps/${{ env.wf_group }}/wfs/"
+  sg_url: ""
   wf_template: "/wicked-hop/aplattel-tf-exercise:5"
   tf_action: "plan"
 
@@ -18,66 +18,69 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - run: echo "SG_URL=https://api.app.stackguardian.io/api/v1/orgs/${{ env.organization }}/wfgrps/${{ env.wf_group }}/wfs/" >> $sg_url
 
-    - name: Create New Workflow 
-      run : |
-        curl --location '${{ env.sg_url }}' \
-        --header 'Content-Type: application/json' \
-        --header 'Accept: application/json' \
-        --header 'Authorization: apikey ${{ secrets.SG_API_TOKEN }}' \
-        --data '{
-            "ResourceName": "${{ env.app_name }}",
-            "Description":"Created with GitOps",
-            "Tags": ["git"],
-            "ContextTags": {},
-            "VCSConfig": {
-                "iacVCSConfig": {
-                    "useMarketplaceTemplate": true,
-                    "iacTemplateId": "${{ env.wf_template }}"
-                },
-                "iacInputData": {
-                    "data": {
-                        "instance_type": "t3.nano",
-                        "region_selection": "us-east-1"
-                    },
-                    "schemaType": "FORM_JSONSCHEMA"
-                }
-            },
-            "WfType": "TERRAFORM",
-            "RunnerConstraints": {
-                "type": "shared"
-            },
-            "DeploymentPlatformConfig": [
-                {
-                    "config": {
-                        "profileName": "aws-demo",
-                        "integrationId": "/integrations/aws-demo"
-                    },
-                    "kind": "AWS_STATIC"
-                }
-            ],
-            "TerraformConfig": {
-                "managedTerraformState": true,
-                "postPlanHooks": [
-                    "SLEEP_TIME=2\necho \"Initializing network configuration...\"\n\nsleep $SLEEP_TIME\necho \"\"\necho \"Assign IP addresses (static / DHCP)...\"\necho \"Verifying subnetting (subnet mask, gateway, broadcast address)...\"\necho \"Configuring DNS so nodes can resolve each other by name...\"\nsleep $SLEEP_TIME\n\necho \"\"\necho \"Setting up local routing tables to reach other subnets...\"\necho \"Configuring gateways (default route to leave the local subnet)...\"\necho \"Enabling dynamic routing protocols if needed (OSPF, BGP, RIP) for larger networks...\"\nsleep $SLEEP_TIME\n\necho \"\"\necho \"Ping tests (ICMP) between nodes...\"\necho \"Traceroute to diagnose path issues...\"\necho \"Check ARP/Neighbor discovery for local resolution...\"\nsleep $SLEEP_TIME\n\necho \"\"\necho \"Configure firewalls (iptables, nftables, Windows Firewall, or cloud security groups)...\"\necho \"Set up ACLs (Access Control Lists) if needed...\"\necho \"Apply encryption for data in transit (VPN, TLS, IPsec)...\"\nsleep $SLEEP_TIME\n\necho \"\"\necho \"Configuration complete. All nodes should now be able to communicate with each other\u0021\""
+    - run: echo "${{ env.sg_url }}"
 
-                ],
-                "runPreInitHooksOnDrift": false,
-                "runPrePlanHooksOnDrift": false
-            }
-        }'
+    # - name: Create New Workflow 
+    #   run : |
+    #     curl --location '${{ env.sg_url }}' \
+    #     --header 'Content-Type: application/json' \
+    #     --header 'Accept: application/json' \
+    #     --header 'Authorization: apikey ${{ secrets.SG_API_TOKEN }}' \
+    #     --data '{
+    #         "ResourceName": "${{ env.app_name }}",
+    #         "Description":"Created with GitOps",
+    #         "Tags": ["git"],
+    #         "ContextTags": {},
+    #         "VCSConfig": {
+    #             "iacVCSConfig": {
+    #                 "useMarketplaceTemplate": true,
+    #                 "iacTemplateId": "${{ env.wf_template }}"
+    #             },
+    #             "iacInputData": {
+    #                 "data": {
+    #                     "instance_type": "t3.nano",
+    #                     "region_selection": "us-east-1"
+    #                 },
+    #                 "schemaType": "FORM_JSONSCHEMA"
+    #             }
+    #         },
+    #         "WfType": "TERRAFORM",
+    #         "RunnerConstraints": {
+    #             "type": "shared"
+    #         },
+    #         "DeploymentPlatformConfig": [
+    #             {
+    #                 "config": {
+    #                     "profileName": "aws-demo",
+    #                     "integrationId": "/integrations/aws-demo"
+    #                 },
+    #                 "kind": "AWS_STATIC"
+    #             }
+    #         ],
+    #         "TerraformConfig": {
+    #             "managedTerraformState": true,
+    #             "postPlanHooks": [
+    #                 "SLEEP_TIME=2\necho \"Initializing network configuration...\"\n\nsleep $SLEEP_TIME\necho \"\"\necho \"Assign IP addresses (static / DHCP)...\"\necho \"Verifying subnetting (subnet mask, gateway, broadcast address)...\"\necho \"Configuring DNS so nodes can resolve each other by name...\"\nsleep $SLEEP_TIME\n\necho \"\"\necho \"Setting up local routing tables to reach other subnets...\"\necho \"Configuring gateways (default route to leave the local subnet)...\"\necho \"Enabling dynamic routing protocols if needed (OSPF, BGP, RIP) for larger networks...\"\nsleep $SLEEP_TIME\n\necho \"\"\necho \"Ping tests (ICMP) between nodes...\"\necho \"Traceroute to diagnose path issues...\"\necho \"Check ARP/Neighbor discovery for local resolution...\"\nsleep $SLEEP_TIME\n\necho \"\"\necho \"Configure firewalls (iptables, nftables, Windows Firewall, or cloud security groups)...\"\necho \"Set up ACLs (Access Control Lists) if needed...\"\necho \"Apply encryption for data in transit (VPN, TLS, IPsec)...\"\nsleep $SLEEP_TIME\n\necho \"\"\necho \"Configuration complete. All nodes should now be able to communicate with each other\u0021\""
+
+    #             ],
+    #             "runPreInitHooksOnDrift": false,
+    #             "runPrePlanHooksOnDrift": false
+    #         }
+    #     }'
     
 
-    - name: Deploy New Workflow 
-      run : |
-        curl --location '${{ env.sg_url }}${{ env.app_name }}/wfruns/' \
-        --header 'Content-Type: application/json' \
-        --header 'Accept: application/json' \
-        --header 'Authorization: apikey ${{ secrets.SG_API_TOKEN }}' \
-        --data '{
-          "TerraformAction": {
-            "action": "${{ env.tf_action }}"
-          }
-        }'
+    # - name: Deploy New Workflow 
+    #   run : |
+    #     curl --location '${{ env.sg_url }}${{ env.app_name }}/wfruns/' \
+    #     --header 'Content-Type: application/json' \
+    #     --header 'Accept: application/json' \
+    #     --header 'Authorization: apikey ${{ secrets.SG_API_TOKEN }}' \
+    #     --data '{
+    #       "TerraformAction": {
+    #         "action": "${{ env.tf_action }}"
+    #       }
+    #     }'
 
         
