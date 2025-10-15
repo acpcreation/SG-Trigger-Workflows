@@ -8,7 +8,6 @@ env:
   app_name: "GH-Deployed-Application"
   organization: "wicked-hop"
   wf_group: "APlattel"
-  sg_url: ""
   wf_template: "/wicked-hop/aplattel-tf-exercise:5"
   tf_action: "plan"
 
@@ -18,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - run: echo "SG_URL=https://api.app.stackguardian.io/api/v1/orgs/${{ env.organization }}/wfgrps/${{ env.wf_group }}/wfs/" >> $sg_url
+    - run: echo "SG_URL=https://api.app.stackguardian.io/api/v1/orgs/${{ env.organization }}/wfgrps/${{ env.wf_group }}/wfs/" >> $GITHUB_ENV
 
-    - run: echo "${{ env.sg_url }}"
+    - run: echo "$SG_URL"
 
     # - name: Create New Workflow 
     #   run : |
