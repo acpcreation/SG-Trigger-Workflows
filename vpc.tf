@@ -1,3 +1,5 @@
+# TERRAFORM
+
 # Virtual Private Cloud (VPC) - isolated network environment in AWS
 # Commented out to use existing VPC instead of creating a new one
 resource "aws_vpc" "vpc_cidr"{
