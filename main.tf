@@ -18,7 +18,7 @@ data "aws_ami" "amazon_linux" {
 resource "aws_security_group" "web_sg" {
     name        = "${var.server_name}-security-group"
     description = "Security group for ${var.server_name}"
-    vpc_id      = data.aws_vpc.vpc_cidr.id
+    vpc_id      = aws_vpc.vpc_cidr.id
 
     # Allow inbound SSH traffic on port 22 from any IP address
     ingress {

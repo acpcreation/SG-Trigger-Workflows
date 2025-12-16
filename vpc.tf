@@ -17,7 +17,7 @@ resource "aws_vpc" "vpc_cidr"{
 
 # Public subnet where the EC2 instance will be placed
 resource "aws_subnet" "web_subnet" {
-    vpc_id                  = data.aws_vpc.vpc_cidr.id
+    vpc_id                  = aws_vpc.vpc_cidr.id
     cidr_block              = "10.0.2.0/24"                 # Subnet IP range (256 IP addresses)
     availability_zone       = "${var.region_selection}a"    # Physical location within the region
     map_public_ip_on_launch = true                          # Automatically assign public IP to instances
@@ -30,7 +30,7 @@ resource "aws_subnet" "web_subnet" {
 # Internet Gateway - allows internet access to/from the VPC
 # Commented out to use existing internet gateway
 resource "aws_internet_gateway" "web_igw" {
-    vpc_id = data.aws_vpc.vpc_cidr.id
+    vpc_id = aws_vpc.vpc_cidr.id
 
     tags = {
         Name = "web-igw"
@@ -47,12 +47,12 @@ resource "aws_internet_gateway" "web_igw" {
 
 # Route table - defines network routing rules
 resource "aws_route_table" "web_rt" {
-    vpc_id = data.aws_vpc.vpc_cidr.id
+    vpc_id = aws_vpc.vpc_cidr.id
 
     # Route all traffic (0.0.0.0/0) to the internet gateway
     route {
         cidr_block = "0.0.0.0/0"
-        gateway_id = data.aws_internet_gateway.web_igw.id
+        gateway_id = aws_internet_gateway.web_igw.id
     }
 
     tags = {
