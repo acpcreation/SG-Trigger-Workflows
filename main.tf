@@ -1,3 +1,5 @@
+# TERRAFORM
+
 # Data source to fetch the latest Amazon Linux 2 AMI for the selected region
 data "aws_ami" "amazon_linux" {
   most_recent = true
